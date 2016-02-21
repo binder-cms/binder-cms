@@ -1,0 +1,6 @@
+page:
+    path: /{path}
+    requirements:
+        path: .*
+    defaults:
+        _controller: BinderPageBundle:Page:show
