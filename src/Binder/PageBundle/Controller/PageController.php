@@ -3,8 +3,8 @@
 namespace Binder\PageBundle\Controller;
 
 
+use Binder\PageBundle\Service\TemplateLocator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -18,7 +18,7 @@ class PageController extends Controller
     public function showAction($path)
     {
         $template = $this->convertPathToTemplate($path);
-        if ($this->templateExists($template)) {
+        if ($template) {
             return $this->render($template);
         }
         throw new NotFoundHttpException();
@@ -26,21 +26,8 @@ class PageController extends Controller
 
     private function convertPathToTemplate($path)
     {
-        $path = trim($path, '/');
-        // A path of "/" is rendered by index.html.twig.
-        if ('' === $path) {
-            $path = 'index';
-        }
-        // The templating system doesn't like dashes in template filenames
-        // for some reason.
-        $path = str_replace('-', '_', $path);
-        return ":pages:$path.html.twig";
-    }
-
-    private function templateExists($template)
-    {
-        /** @var $engine EngineInterface */
-        $engine = $this->get('templating');
-        return $engine->exists($template);
+        /** @var $locator TemplateLocator */
+        $locator = $this->get('binder_page.template_locator');
+        return $locator->pathToTemplate($path);
     }
 }

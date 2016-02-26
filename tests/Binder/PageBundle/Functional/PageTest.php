@@ -41,7 +41,7 @@ class PageTest extends FunctionalTestCase
     public function testTopLevelPage()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/about-us/');
+        $crawler = $client->request('GET', '/about-us.html');
         $this->assertStatus(Response::HTTP_OK, $client->getResponse());
 
         $this->checkTemplate($crawler);
@@ -56,7 +56,7 @@ class PageTest extends FunctionalTestCase
     public function testDeeperPage()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/products/necklace');
+        $crawler = $client->request('GET', '/products/necklace.html');
         $this->assertStatus(Response::HTTP_OK, $client->getResponse());
 
         $this->checkTemplate($crawler);
