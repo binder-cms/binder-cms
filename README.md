@@ -13,10 +13,10 @@ Who is this for?
 
 Binder is for people who want to:
 
-    * code HTML and CSS by hand;
-    * build a website using their preferred text editor or IDE;
-    * maintain their website in their preferred version control system
-      (eg, [Git][git]).
+* code HTML and CSS by hand;
+* build a website using their preferred text editor or IDE;
+* maintain their website in their preferred version control system
+  (eg, [Git][git]).
 
 If you do not know how to write HTML by hand, then this is not for you. You
 probably want a more "traditional" CMS such as [Wordpress][wordpress].
