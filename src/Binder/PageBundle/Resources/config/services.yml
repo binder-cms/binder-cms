@@ -1,18 +1,23 @@
 parameters:
-    binder_page.dir: pages
-    binder_page.path: "%kernel.root_dir%/Resources/views/%binder_page.dir%"
+    binder_page.dirname: pages
+    binder_page.path: "%kernel.root_dir%/Resources/views/%binder_page.dirname%"
 
 services:
+    binder_page.directory:
+        class: Binder\PageBundle\Service\PageDirectory
+        arguments:
+            - "%binder_page.path%"
+
     binder_page.template_locator:
         class: Binder\PageBundle\Service\TemplateLocator
         arguments:
             - "@templating"
-            - "%binder_page.dir%"
+            - "@binder_page.directory"
 
     binder_page.auto_menu:
         class: Binder\PageBundle\Service\AutoMenu
         arguments:
-            - "%binder_page.path%"
+            - "@binder_page.directory"
 
     binder_page.twig_ext:
         class: Binder\PageBundle\Twig\PageExtension

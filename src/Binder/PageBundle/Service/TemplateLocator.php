@@ -1,6 +1,7 @@
 <?php
 
 namespace Binder\PageBundle\Service;
+
 use Symfony\Component\Templating\EngineInterface;
 
 /**
@@ -16,19 +17,23 @@ class TemplateLocator
     /**
      * The directory where user pages are kept.
      *
-     * @var string
+     * @var PageDirectory
      */
     private $pageDir;
 
-    public function __construct(EngineInterface $templating, $pagedir)
+    public function __construct(EngineInterface $templating, PageDirectory $pageDir)
     {
         $this->templating = $templating;
-        $this->pageDir = trim($pagedir, '/');
+        $this->pageDir = $pageDir;
     }
 
     /**
-     * @param string $path
-     * @return string|null
+     * Takes a URL path and returns the template that should be used to
+     * render that page.
+     *
+     * @param string $path The URL path
+     * @return string|null The template name; null if there is no matching
+     *                     template
      */
     public function pathToTemplate($path)
     {
@@ -37,7 +42,7 @@ class TemplateLocator
         // for some reason.
         $path = str_replace('-', '_', $path);
 
-        $d = $this->pageDir;
+        $d = $this->pageDir->getBasename();
         $try = [
             ":$d:$path.twig",
             ":$d:$path/index.html.twig",
@@ -50,6 +55,4 @@ class TemplateLocator
         }
         return null;
     }
-
-
 }
