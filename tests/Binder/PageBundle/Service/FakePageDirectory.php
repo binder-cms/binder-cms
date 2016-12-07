@@ -8,6 +8,12 @@ use Symfony\Component\Finder\SplFileInfo;
 
 class FakePageDirectory extends PageDirectory
 {
+    /**
+     * A list of fake template filepaths. These should be relative paths,
+     * relative to the PageDirectory rootpath.
+     *
+     * @var string[]
+     */
     public $filepaths = [];
 
     protected function validatePath($path)
@@ -17,10 +23,10 @@ class FakePageDirectory extends PageDirectory
 
     public function scanFiles()
     {
-        return array_map(function ($filepath) {
+        return array_map(function ($relativePathname) {
             $relativePath = $this->path;
-            $relativePathname = $this->path . DIRECTORY_SEPARATOR . $filepath;
-            return new SplFileInfo($filepath, $relativePath, $relativePathname);
+            $fullpath = $this->path . DIRECTORY_SEPARATOR . $relativePathname;
+            return new SplFileInfo($fullpath, $relativePath, $relativePathname);
         }, $this->filepaths);
     }
 }

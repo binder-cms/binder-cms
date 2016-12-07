@@ -2,6 +2,7 @@
 
 namespace Tests\Binder\PageBundle\Service;
 
+use Binder\PageBundle\Model\MenuItem;
 use Binder\PageBundle\Service\AutoMenu;
 use Tests\Binder\UnitTestCase;
 
@@ -25,4 +26,29 @@ class AutoMenuTest extends UnitTestCase
         $dir->filepaths = $files;
         return $dir;
     }
+
+    /**
+     * @dataProvider templateToPathProvider
+     */
+    public function testGetItems_itemHasCorrectUrlPath($templateName, $expectedPath)
+    {
+        $stubDir = $this->stubPageDirectory([$templateName]);
+        $menu = new AutoMenu($stubDir);
+
+        /** @var $menuItem MenuItem */
+        $menuItem = $menu->getItems()[0];
+
+        $this->assertSame($expectedPath, $menuItem->getUrl());
+    }
+
+    public function templateToPathProvider()
+    {
+        return [
+            ['index.html.twig', 'index.html'],
+            ['products/lightbulb.html.twig', 'products/lightbulb.html'],
+            [':pages:contact.html.twig', 'contact.html'],
+
+        ];
+    }
+
 }
