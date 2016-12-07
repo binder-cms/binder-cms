@@ -51,4 +51,26 @@ class AutoMenuTest extends UnitTestCase
         ];
     }
 
+    /**
+     * @dataProvider templateToLabelProvider
+     */
+    public function testGetItems_itemHasCorrectLabel($templateName, $expectedLabel)
+    {
+        $stubDir = $this->stubPageDirectory([$templateName]);
+        $menu = new AutoMenu($stubDir);
+
+        /** @var $menuItem MenuItem */
+        $menuItem = $menu->getItems()[0];
+
+        $this->assertSame($expectedLabel, $menuItem->getLabel());
+    }
+
+    public function templateToLabelProvider()
+    {
+        return [
+            ['index.html.twig', 'Index'],
+            ['about_us.html.twig', 'About us'],
+            ['products/lightbulb.html.twig', 'Lightbulb'],
+        ];
+    }
 }

@@ -41,9 +41,18 @@ class AutoMenu implements Menu
         foreach ($files as $file) {
             /** @var $file SplFileInfo */
             $url = $this->resolver->templateToPath($file->getRelativePathname());
-            $name = $file->getBasename();
-            $items[] = new MenuItem($name, $url);
+            $label = $this->generateLinkLabel($file);
+            $items[] = new MenuItem($label, $url);
         }
         return $items;
+    }
+
+    private function generateLinkLabel(SplFileInfo $file)
+    {
+        $title = $file->getBasename();
+        $title = str_ireplace('.twig', '', $title);
+        $title = str_ireplace('.html', '', $title);
+        $title = str_ireplace('_', ' ', $title);
+        return ucfirst($title);
     }
 }
