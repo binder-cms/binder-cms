@@ -12,7 +12,7 @@
         stopOnFailure               = "false"
         stopOnError                 = "false"
         syntaxCheck                 = "false"
-        bootstrap                   = "tests.bootstrap.php">
+        bootstrap                   = "vendor/autoload.php">
 
     <php>
         <ini name="error_reporting"
