@@ -1,5 +1,5 @@
 {
-    "name": "binder-cms/binder",
+    "name": "binder-cms/binder-cms",
     "type": "symfony-bundle",
     "description": "The source-controlled CMS",
     "license": "MIT",
