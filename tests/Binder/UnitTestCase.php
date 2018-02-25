@@ -3,7 +3,9 @@
 namespace Tests\Binder;
 
 
-class UnitTestCase extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class UnitTestCase extends TestCase
 {
     // no modifications yet
 }

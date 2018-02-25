@@ -23,7 +23,7 @@ class TemplateLocatorTest extends UnitTestCase
 
     private function fakeTemplating($pathExists)
     {
-        $templating = $this->getMock(EngineInterface::class);
+        $templating = $this->createMock(EngineInterface::class);
         $templating->method('exists')
             ->willReturn($pathExists);
         return $templating;
