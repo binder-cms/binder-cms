@@ -4,30 +4,42 @@ namespace Binder\PageBundle\Controller;
 
 
 use Binder\PageBundle\Service\TemplateLocator;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Templating\EngineInterface;
 
 /**
  * This is the main controller for rendering website pages.
  */
-class PageController extends Controller
+class PageController
 {
+    /** @var TemplateLocator */
+    private $locator;
+
+    /** @var EngineInterface */
+    private $templating;
+
+    public function __construct(TemplateLocator $locator, EngineInterface $templating)
+    {
+        $this->locator = $locator;
+        $this->templating = $templating;
+    }
+
     /**
      * Renders the page whose URL path is given.
      */
-    public function showAction($path)
+    public function showAction(string $path)
     {
-        $template = $this->convertPathToTemplate($path);
-        if ($template) {
+        if ($this->locator->templateExists($path)) {
+            $template = $this->locator->pathToTemplate($path);
             return $this->render($template);
         }
         throw new NotFoundHttpException();
     }
 
-    private function convertPathToTemplate($path)
+    private function render(string $template, array $params = []): Response
     {
-        /** @var $locator TemplateLocator */
-        $locator = $this->get('binder_page.template_locator');
-        return $locator->pathToTemplate($path);
+        $content = $this->templating->render($template, $params);
+        return new Response($content);
     }
 }

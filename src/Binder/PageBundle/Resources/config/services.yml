@@ -3,26 +3,21 @@ parameters:
     binder_page.path: "%kernel.root_dir%/Resources/views/%binder_page.dirname%"
 
 services:
-    binder_page.directory:
-        class: Binder\PageBundle\Service\PageDirectory
-        arguments:
-            - "%binder_page.path%"
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
 
-    binder_page.template_locator:
-        class: Binder\PageBundle\Service\TemplateLocator
-        arguments:
-            - "@templating"
-            - "@binder_page.directory"
+    Binder\PageBundle\Controller\PageController:
+        public: true
 
-    binder_page.auto_menu:
-        class: Binder\PageBundle\Service\AutoMenu
+    Binder\PageBundle\Service\PageDirectory:
         arguments:
-            - "@binder_page.directory"
+            $path: "%binder_page.path%"
 
-    binder_page.twig_ext:
-        class: Binder\PageBundle\Twig\PageExtension
-        arguments:
-            - "@binder_page.auto_menu"
-        tags:
-            - { name: twig.extension }
+    Binder\PageBundle\Service\TemplateLocator: ~
+
+    Binder\PageBundle\Service\AutoMenu: ~
+
+    Binder\PageBundle\Twig\PageExtension: ~
 

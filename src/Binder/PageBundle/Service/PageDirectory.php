@@ -17,10 +17,9 @@ class PageDirectory
     protected $path;
 
     /**
-     * @param string $path
      * @throws \InvalidArgumentException if $path does not exist
      */
-    public function __construct($path)
+    public function __construct(string $path)
     {
         $this->path = rtrim($path, DIRECTORY_SEPARATOR);
         $this->validatePath($this->path);
@@ -44,7 +43,7 @@ class PageDirectory
     /**
      * @return string The name of the user page directory.
      */
-    public function getBasename()
+    public function getBasename(): string
     {
         return basename($this->path);
     }

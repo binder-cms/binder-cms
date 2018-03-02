@@ -9,16 +9,39 @@ use Tests\Binder\UnitTestCase;
 
 class TemplateLocatorTest extends UnitTestCase
 {
-    public function testPathToTemplate_withInvalidPath_returnsNull()
+    public function testTemplateExists_withInvalidPath_returnsFalse()
     {
         $pathExists = false;
         $templating = $this->fakeTemplating($pathExists);
         $directory = new FakePageDirectory('/tmp/pages');
         $locator = $this->makeLocator($templating, $directory);
 
-        $template = $locator->pathToTemplate('some/path.html');
+        $result = $locator->templateExists('some/path.html');
 
-        $this->assertNull($template);
+        $this->assertFalse($result);
+    }
+
+    public function testTemplateExists_withValidPath_returnsTrue()
+    {
+        $pathExists = true;
+        $templating = $this->fakeTemplating($pathExists);
+        $directory = new FakePageDirectory('/tmp/pages');
+        $locator = $this->makeLocator($templating, $directory);
+
+        $result = $locator->templateExists('some/path.html');
+
+        $this->assertTrue($result);
+    }
+
+    public function testPathToTemplate_withInvalidPath_throwsException()
+    {
+        $pathExists = false;
+        $templating = $this->fakeTemplating($pathExists);
+        $directory = new FakePageDirectory('/tmp/pages');
+        $locator = $this->makeLocator($templating, $directory);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $locator->pathToTemplate('some/path.html');
     }
 
     private function fakeTemplating($pathExists)
@@ -44,6 +67,6 @@ class TemplateLocatorTest extends UnitTestCase
 
         $template = $locator->pathToTemplate('some/path.html');
 
-        $this->assertSame($template, ':pages:some/path.html.twig');
+        $this->assertSame($template, 'pages/some/path.html.twig');
     }
 }

@@ -27,6 +27,11 @@ class TemplateLocator
         $this->pageDir = $pageDir;
     }
 
+    public function templateExists(string $path): bool
+    {
+        return null !== $this->getTemplateOrNull($path);
+    }
+
     /**
      * Takes a URL path and returns the template that should be used to
      * render that page.
@@ -35,7 +40,7 @@ class TemplateLocator
      * @return string|null The template name; null if there is no matching
      *                     template
      */
-    public function pathToTemplate($path)
+    private function getTemplateOrNull(string $path)
     {
         $path = trim($path, '/') ?: 'index.html';
         // The templating system doesn't like dashes in template filenames
@@ -44,9 +49,9 @@ class TemplateLocator
 
         $d = $this->pageDir->getBasename();
         $try = [
-            ":$d:$path.twig",
-            ":$d:$path/index.html.twig",
-            ":$d:$path",
+            "$d/$path.twig",
+            "$d/$path/index.html.twig",
+            "$d/$path",
         ];
         foreach ($try as $template) {
             if ($this->templating->exists($template)) {
@@ -54,5 +59,14 @@ class TemplateLocator
             }
         }
         return null;
+    }
+
+    public function pathToTemplate(string $path): string
+    {
+        $template = $this->getTemplateOrNull($path);
+        if ($template) {
+            return $template;
+        }
+        throw new \InvalidArgumentException("No template exists for path '$path'");
     }
 }
